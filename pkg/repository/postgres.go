@@ -5,6 +5,7 @@ import (
 	"log"
 	"os"
 
+	"github.com/makiwebdeveloper/30dayschallenge-server/pkg/domain"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
@@ -17,6 +18,10 @@ func NewPostgresDB() (*gorm.DB, error) {
 		os.Getenv("DB_PASSWORD"),
 		os.Getenv("DB_NAME"),
 	)
+
+	fmt.Println("+-----------DSN----------+")
+	fmt.Println(dsn)
+	fmt.Println("+------------------------+")
 
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{
 		Logger: logger.Default.LogMode(logger.Info),
@@ -31,7 +36,7 @@ func NewPostgresDB() (*gorm.DB, error) {
 	db.Logger = logger.Default.LogMode(logger.Info)
 
 	log.Println("Running migrations")
-	// db.AutoMigrate(&models.User{})
+	db.AutoMigrate(&domain.User{})
 
 	return db, nil
 }
